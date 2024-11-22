@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Air Bersih Untuk Semua - Edukasi & Informasi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .header {
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100%" height="100%" fill="%231ca3ec"/></svg>');
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .nav {
+            background: #008CBA;
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            margin: 0 0.5rem;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+
+        .nav a:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .main-content {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            color: #008CBA;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #008CBA;
+        }
+
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .card {
+            background: #f5f5f5;
+            padding: 1.5rem;
+            border-radius: 8px;
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .fact-box {
+            background: #e3f2fd;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+        .highlight {
+            background: #fff3e0;
+            padding: 1rem;
+            border-left: 4px solid #ff9800;
+            margin: 1rem 0;
+        }
+
+        .action-button {
+            display: inline-block;
+            background: #008CBA;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            text-decoration: none;
+            border-radius: 4px;
+            margin-top: 1rem;
+            transition: background 0.3s;
+        }
+
+        .action-button:hover {
+            background: #006687;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 1.5rem;
+            background: #f5f5f5;
+            border-radius: 8px;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            color: #008CBA;
+            font-weight: bold;
+        }
+
+        .tips-list {
+            list-style: none;
+        }
+
+        .tips-list li {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .tips-list li:before {
+            content: "💧";
+            position: absolute;
+            left: 0;
+        }
+
+        footer {
+            background: #333;
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .nav {
+                display: flex;
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .nav a {
+                margin: 0.5rem 0;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>Air Bersih Untuk Semua</h1>
+        <p>Mari bersama mewujudkan akses air bersih yang berkelanjutan</p>
+    </header>
+
+    <nav class="nav">
+        <a href="index.html">Beranda</a>
+        <a href="kalkulator.html">Kalkulator Air</a>
+        <a href="peta.html">Peta Akses</a>
+        <a href="tips.html">Tips Hemat Air</a>
+        <a href="forum.html">Forum</a>
+        <a href="lapor.html">Lapor Krisis</a>
+    </nav>
+
+    <div class="main-content">
+        <section class="section">
+            <h2 class="section-title">Mengapa Air Bersih Penting?</h2>
+            <p>Air bersih adalah kebutuhan dasar manusia yang sangat vital. Tidak hanya untuk minum, air bersih juga diperlukan untuk:</p>
+            <div class="card-container">
+                <div class="card">
+                    <h3>Kesehatan</h3>
+                    <p>Air bersih mencegah penyakit diare, kolera, dan infeksi lainnya yang ditularkan melalui air.</p>
+                </div>
+                <div class="card">
+                    <h3>Sanitasi</h3>
+                    <p>Menjaga kebersihan diri dan lingkungan membutuhkan akses ke air bersih yang memadai.</p>
+                </div>
+                <div class="card">
+                    <h3>Produktivitas</h3>
+                    <p>Akses air bersih yang mudah meningkatkan produktivitas dan kualitas hidup masyarakat.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Fakta Tentang Air</h2>
+            <div class="stat-grid">
+                <div class="stat-item">
+                    <div class="stat-number">71%</div>
+                    <p>Permukaan bumi tertutup air</p>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">2.5%</div>
+                    <p>Air tawar dari total air di bumi</p>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">50L</div>
+                    <p>Kebutuhan air bersih per orang per hari</p>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">33%</div>
+                    <p>Masyarakat Indonesia belum memiliki akses air bersih layak</p>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">2.2M</div>
+                    <p>Jiwa masih menggunakan air permukaan untuk kebutuhan sehari-hari</p>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">4.5%</div>
+                    <p>Peningkatan kebutuhan air bersih setiap tahun</p>
+                </div>
+            </div>
+
+            <div class="fact-box">
+                <h3>Tahukah Anda?</h3>
+                <p>Satu orang membutuhkan rata-rata 60 liter air bersih per hari untuk memenuhi kebutuhan dasar seperti minum, memasak, dan kebersihan diri.</p>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Tips Menghemat Air</h2>
+            <ul class="tips-list">
+                <li>Pastikan keran air tertutup rapat saat tidak digunakan</li>
+                <li>Gunakan air bekas cucian sayur untuk menyiram tanaman</li>
+                <li>Perbaiki segera kebocoran pada pipa atau keran</li>
+                <li>Gunakan ember daripada selang saat mencuci kendaraan</li>
+                <li>Tampung air hujan untuk keperluan non-konsumsi</li>
+            </ul>
+
+            <div class="highlight">
+                <h3>Hemat Air = Hemat Biaya</h3>
+                <p>Dengan menghemat air, Anda tidak hanya membantu lingkungan tetapi juga menghemat pengeluaran bulanan.</p>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2 class="section-title">Bagaimana Anda Bisa Berkontribusi?</h2>
+            <div class="card-container">
+                <div class="card">
+                    <h3>Laporkan Masalah</h3>
+                    <p>Temukan masalah air di sekitar Anda? Laporkan segera melalui fitur pelaporan kami.</p>
+                    <a href="#lapor" class="action-button">Lapor Sekarang</a>
+                </div>
+                <div class="card">
+                    <h3>Berbagi Informasi</h3>
+                    <p>Bagikan pengalaman dan solusi Anda di forum diskusi komunitas.</p>
+                    <a href="#forum" class="action-button">Ke Forum</a>
+                </div>
+                <div class="card">
+                    <h3>Edukasi</h3>
+                    <p>Sebarkan kesadaran tentang pentingnya air bersih kepada keluarga dan komunitas.</p>
+                    <a href="#tips" class="action-button">Lihat Tips</a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>© 2024 Air Bersih Untuk Semua. Semua hak dilindungi.</p>
+        <p>Kontak Darurat: 112</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peta Akses Air Bersih - Air Bersih Untuk Semua</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .header {
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100%" height="100%" fill="%231ca3ec"/></svg>');
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .nav {
+            background: #008CBA;
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            margin: 0 0.5rem;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+
+        .nav a:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        body {
+            background: #f0f2f5;
+        }
+
+        .map-container {
+            display: flex;
+            height: 100vh;
+            position: relative;
+        }
+
+        .sidebar {
+            width: 350px;
+            background: #ffffff;
+            padding: 1.5rem;
+            overflow-y: auto;
+            position:sticky;
+            box-shadow : 2px 0 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            z-index: 9;
+        }
+
+        .map {
+            flex-grow: 1;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .search-box {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            border-color: #1a73e8;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(26,115,232,0.2);
+        }
+
+        .location-list {
+            list-style: none;
+        }
+
+        .location-item {
+            background: #ffffff;
+            margin: 0.8rem 0;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid #e0e0e0;
+        }
+
+        .location-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-color: #1a73e8;
+        }
+
+        .location-item h3 {
+            color: #202124;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .location-item p {
+            color: #5f6368;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-top: 0.8rem;
+        }
+
+        .status-critical {
+            background: #fce8e6;
+            color: #d93025;
+        }
+
+        .status-warning {
+            background: #fef7e0;
+            color: #f29900;
+        }
+
+        .status-good {
+            background: #e6f4ea;
+            color: #137333;
+        }
+
+        .add-report {
+            background: #1a73e8;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            width: 100%;
+            margin-top: 1.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .add-report:hover {
+            background: #1557b0;
+            transform: translateY(-1px);
+        }
+
+        .filter-group {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+
+        .filter-title {
+            font-weight: 500;
+            color: #202124;
+            margin-bottom: 0.8rem;
+        }
+
+        .filter-option {
+            display: flex;
+            align-items: center;
+            margin: 0.5rem 0;
+            cursor: pointer;
+        }
+
+        .filter-option input[type="checkbox"] {
+            margin-right: 0.5rem;
+            cursor: pointer;
+        }
+
+        .popup-content {
+            padding: 1rem;
+        }
+
+        .popup-content h3 {
+            color: #202124;
+            margin-bottom: 0.5rem;
+        }
+
+        .popup-content p {
+            color: #5f6368;
+            margin: 0.3rem 0;
+        }
+
+        .toggle-sidebar {
+            display: none;
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            z-index: 1001;
+            background: white;
+            border: none;
+            padding: 0.5rem;
+            border-radius: 4px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            cursor: pointer;
+        }
+
+        footer {
+            background: #333;
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .map-container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: 50vh;
+                transform: translateY(0);
+            }
+
+            .sidebar.hidden {
+                transform: translateY(-100%);
+            }
+
+            .map {
+                height: 50vh;
+            }
+
+            .toggle-sidebar {
+                display: block;
+            }
+        }
+
+        .loading {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255,255,255,0.9);
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 2000;
+        }
+
+        .custom-marker {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .marker-critical { background: #d93025; }
+        .marker-warning { background: #f29900; }
+        .marker-good { background: #137333; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>Air Bersih Untuk Semua</h1>
+        <p>Mari bersama mewujudkan akses air bersih yang berkelanjutan</p>
+    </header>
+
+    <nav class="nav">
+        <a href="index.html">Beranda</a>
+        <a href="kalkulator.html">Kalkulator Air</a>
+        <a href="peta.html">Peta Akses</a>
+        <a href="tips.html">Tips Hemat Air</a>
+        <a href="forum.html">Forum</a>
+        <a href="lapor.html">Lapor Krisis</a>
+    </nav>
+
+    <button class="toggle-sidebar" id="toggleSidebar">☰</button>
+    <div class="map-container">
+        <div class="sidebar" id="sidebar">
+
+            <div class="search-box">
+                <input type="text" class="search-input" placeholder="Cari lokasi atau daerah...">
+            </div>
+
+            <div class="filter-group">
+                <div class="filter-title">Filter Status Air</div>
+                <div class="filter-option">
+                    <input type="checkbox" id="critical" checked>
+                    <label for="critical">Krisis</label>
+                </div>
+                <div class="filter-option">
+                    <input type="checkbox" id="warning" checked>
+                    <label for="warning">Perlu Perhatian</label>
+                </div>
+                <div class="filter-option">
+                    <input type="checkbox" id="good" checked>
+                    <label for="good">Baik</label>
+                </div>
+            </div>
+
+            <ul class="location-list" id="locationList"></ul>
+
+            <a href="lapor.html">
+                <button class="add-report" id="addReport">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"></svg>
+                    Laporkan Kondisi Air
+                </button>
+            </a>
+        </div>
+        <div id="map" class="map"></div>
+    </div>
+
+    <div id="loading" class="loading" style="display: none;">
+        Memuat data...
+    </div>
+
+    <footer>
+        <p>© 2024 Air Bersih Untuk Semua. Semua hak dilindungi.</p>
+        <p>Kontak Darurat: 112</p>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        // Inisialisasi peta dengan style kustom
+        const map = L.map('map', {
+            zoomControl: false
+        }).setView([-6.200000, 106.816666], 6);
+
+        L.control.zoom({
+            position: 'bottomright'
+        }).addTo(map);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Data contoh lokasi yang diperluas
+        const locations = [
+            {
+                name: "Desa Sukamaju",
+                lat: -6.2,
+                lng: 106.816666,
+                status: "critical",
+                description: "Kekeringan parah, sumber air terbatas",
+                population: 5000,
+                lastUpdate: "2024-03-15",
+                waterQuality: "Buruk",
+                waterSource: "Sumur"
+            },
+            {
+                name: "Kelurahan Harapan",
+                lat: -6.3,
+                lng: 106.9,
+                status: "warning",
+                description: "Kualitas air menurun",
+                population: 7500,
+                lastUpdate: "2024-03-20",
+                waterQuality: "Sedang",
+                waterSource: "PDAM"
+            },
+            {
+                name: "Kota Sejahtera",
+                lat: -6.1,
+                lng: 106.7,
+                status: "good",
+                description: "Akses air bersih tersedia",
+                population: 10000,
+                lastUpdate: "2024-03-22",
+                waterQuality: "Baik",
+                waterSource: "PDAM"
+            }
+        ];
+
+        // Fungsi untuk membuat marker kustom
+        function createCustomMarker(status) {
+            const markerHtml = `<div class="custom-marker marker-${status}"></div>`;
+            const icon = L.divIcon({
+                html: markerHtml,
+                className: 'custom-marker-container',
+                iconSize: [25, 25]
+            });
+            return icon;
+        }
+
+        // Fungsi untuk menambahkan marker ke peta
+        function addMarkers() {
+            locations.forEach(loc => {
+                const marker = L.marker([loc.lat, loc.lng], {
+                    icon: createCustomMarker(loc.status)
+                })
+                    .bindPopup(`
+                        <div class="popup-content">
+                            <h3>${loc.name}</h3>
+                            <p>${loc.description}</p>
+                            <p>Populasi: ${loc.population.toLocaleString()} jiwa</p>
+                            <p>Status: ${getStatusText(loc.status)}</p>
+                            <p>Kualitas Air: ${loc.waterQuality}</p>
+                            <p>Sumber Air: ${loc.waterSource}</p>
+                            <p>Terakhir Diperbarui: ${formatDate(loc.lastUpdate)}</p>
+                        </div>
+                    `, {
+                        maxWidth: 300
+                    })
+                    .addTo(map);
+
+                addToLocationList(loc);
+            });
+        }
+
+        // Fungsi untuk format tanggal
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString('id-ID', options);
+        }
+
+        // Fungsi untuk menambahkan lokasi ke daftar
+        function addToLocationList(loc) {
+            const list = document.getElementById('locationList');
+            const item = document.createElement('li');
+            item.className = 'location-item';
+            item.innerHTML = `
+                <h3>${loc.name}</h3>
+                <p>${loc.description}</p>
+                <p>Terakhir diperbarui: ${formatDate(loc.lastUpdate)}</p>
+                <span class="status status-${loc.status}">${getStatusText(loc.status)}</span>
+            `;
+            item.onclick = () => {
+                map.setView([loc.lat, loc.lng], 13);
+                document.querySelector('.sidebar').classList.add('hidden');
+            };
+            list.appendChild(item);
+        }
+
+        // Fungsi untuk mendapatkan teks status
+        function getStatusText(status) {
+            switch(status) {
+                case 'critical': return 'Krisis';
+                case 'warning': return 'Perlu Perhatian';
+                case 'good': return 'Baik';
+                default: return status;
+            }
+        }
+
+        // Toggle sidebar di mobile
+        document.getElementById('toggleSidebar').addEventListener('click', () => {
+            document.getElementById('sidebar').classList.toggle('hidden');
+        });
+
+        // Event listener untuk pencarian
+        document.querySelector('.search-input').addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const items = document.querySelectorAll('.location-item');
+            
+            items.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                item.style.display = text.includes(searchTerm) ? 'block' : 'none';
+            });
+        });
+
+        // Filter markers berdasarkan status
+        document.querySelectorAll('.filter-option input').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const status = this.id;
+                const items = document.querySelectorAll(`.location-item`);
+                
+                items.forEach(item => {
+                    if (item.querySelector(`.status-${status}`)) {
+                        item.style.display = this.checked ? 'block' : 'none';
+                    }
+                });
+            });
+        });
+
+        // Geolokasi pengguna dengan loading indicator
+        if ("geolocation" in navigator) {
+            const loading = document.getElementById('loading');
+            loading.style.display = 'block';
+
+            navigator.geolocation.getCurrentPosition(
+                position => {
+                    const { latitude, longitude } = position.coords;
+                    map.setView([latitude, longitude], 13);
+                    L.marker([latitude, longitude])
+                        .bindPopup('Lokasi Anda')
+                        .addTo(map);
+                    loading.style.display = 'none';
+                },
+                error => {
+                    console.error('Error getting location:', error);
+                    loading.style.display = 'none';
+                }
+            );
+        }
+
+        // Inisialisasi peta
+        addMarkers();
+    </script>
+</body>
+</html>

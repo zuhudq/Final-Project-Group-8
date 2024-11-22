@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forum Diskusi - Air Bersih Untuk Semua</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .header {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100%" height="100%" fill="%231ca3ec"/></svg>');
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .nav {
+            background: #008CBA;
+            padding: 1rem;
+        }
+
+        .nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            margin: 0 0.5rem;
+        }
+
+        .nav a:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .forum-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .forum-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .category {
+            background: #e0e0e0;
+            padding: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .category:hover {
+            background: #a5a5a5;
+        }
+
+        .post-list {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .post {
+            padding: 1rem;
+            border-bottom: 1px solid #7b7b7b;
+            border-radius: 20px;
+        }
+
+        .post:last-child {
+            border-bottom: none;
+        }
+
+        .post-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .post-title {
+            font-size: 1.1rem;
+            color: #008CBA;
+        }
+
+        .post-meta {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .create-post {
+            background: #008CBA;
+            color: white;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+        }
+
+        .post-form {
+            display: none;
+            background: white;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .button {
+            background: #002835;
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background: #00a9e1;
+        }
+
+        .interactions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .interaction-button {
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        footer {
+            background: #333;
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .forum-categories {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>Forum Diskusi</h1>
+        <p>Berbagi pengalaman dan solusi tentang air bersih</p>
+    </header>
+
+    <nav class="nav">
+        <a href="index.html">Beranda</a>
+        <a href="kalkulator.html">Kalkulator Air</a>
+        <a href="peta.html">Peta Akses</a>
+        <a href="tips.html">Tips Hemat Air</a>
+        <a href="forum.html">Forum</a>
+        <a href="lapor.html">Lapor Krisis</a>
+    </nav>
+
+    <div class="forum-container">
+        <div class="create-post">
+            <h2>Mulai Diskusi Baru</h2>
+            <button class="button" onclick="togglePostForm()">Buat Post Baru</button>
+            
+            <div class="post-form" id="postForm">
+                <div class="form-group">
+                    <label>Kategori</label>
+                    <select required>
+                        <option value="">Pilih Kategori</option>
+                        <option value="diskusi">Diskusi Umum</option>
+                        <option value="tips">Tips & Saran</option>
+                        <option value="proyek">Proyek Air Bersih</option>
+                        <option value="teknologi">Teknologi Air</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Judul</label>
+                    <input type="text" required placeholder="Judul diskusi Anda">
+                </div>
+                <div class="form-group">
+                    <label>Isi Diskusi</label>
+                    <textarea rows="4" required placeholder="Tulis isi diskusi Anda di sini"></textarea>
+                </div>
+                <button class="button" onclick="submitPost()">Kirim</button>
+            </div>
+        </div>
+
+        <div class="forum-categories">
+            <div class="category" onclick="filterPosts('diskusi')">
+                <h3>Diskusi Umum</h3>
+                <p>Diskusi tentang isu air bersih</p>
+            </div>
+            <div class="category" onclick="filterPosts('tips')">
+                <h3>Tips & Saran</h3>
+                <p>Berbagi tips menghemat air</p>
+            </div>
+            <div class="category" onclick="filterPosts('proyek')">
+                <h3>Proyek Air Bersih</h3>
+                <p>Kolaborasi proyek air bersih</p>
+            </div>
+            <div class="category" onclick="filterPosts('teknologi')">
+                <h3>Teknologi Air</h3>
+                <p>Inovasi teknologi air</p>
+            </div>
+        </div>
+
+        <div class="post-list" id="postList">
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2024 Air Bersih Untuk Semua. Semua hak dilindungi.</p>
+        <p>Kontak Darurat: 112</p>
+    </footer>
+
+<script>
+    function loadPosts(category = 'all') {
+        const posts = [
+            {
+                title: "Panduan Lengkap: Membuat Filter Air dengan Media Bertingkat",
+                author: "Dr. Ahmad Hidayat",
+                date: "2024-03-21",
+                category: "tips",
+                content: `Filter air bertingkat adalah solusi efektif untuk mendapatkan air bersih. Bahan yang diperlukan:
+                    - Wadah berbahan food grade
+                    - Kerikil berbagai ukuran
+                    - Pasir silika
+                    - Karbon aktif
+                    - Kapas filter
+                    
+                    Langkah-langkah pembuatan dan maintenance lengkap ada di thread ini...`,
+                likes: 156,
+                comments: 42,
+                verified: true
+            },
+            {
+                title: "Proyek Sumur Bor Komunitas: Desa Sukamaju Fase 2",
+                author: "Budi Santoso",
+                date: "2024-03-20",
+                category: "proyek",
+                content: `Update progress minggu ke-3 pembangunan sumur bor komunitas:
+                    - Kedalaman mencapai 120 meter
+                    - Kualitas air sudah diuji lab
+                    - Distribusi ke 200 KK
+                    
+                    Kendala yang dihadapi dan solusinya...`,
+                likes: 234,
+                comments: 89,
+                verified: true
+            },
+            {
+                title: "Inovasi: Sistem Pemanenan Air Hujan Terintegrasi IoT",
+                author: "Ing. Sarah Wijaya",
+                date: "2024-03-19",
+                category: "teknologi",
+                content: `Sistem smart rainwater harvesting menggunakan:
+                    - Sensor kualitas air realtime
+                    - Monitoring via aplikasi
+                    - Filtrasi otomatis
+                    - Distribusi terjadwal
+                    
+                    Detail spesifikasi dan implementasi...`,
+                likes: 312,
+                comments: 67,
+                verified: true
+            },
+            {
+                title: "Diskusi: Kebijakan Pengelolaan Air Bersih 2024",
+                author: "Prof. Rudi Hartono",
+                date: "2024-03-18",
+                category: "diskusi",
+                content: `Analisis dampak kebijakan baru:
+                    - Regulasi penggunaan air tanah
+                    - Standar baku mutu
+                    - Sistem perizinan
+                    - Sanksi pelanggaran
+                    
+                    Mari diskusikan implementasinya...`,
+                likes: 189,
+                comments: 95,
+                verified: true
+            },
+            {
+                title: "Tips Menghemat Air di Musim Kemarau",
+                author: "Dewi Susanti",
+                date: "2024-03-17",
+                category: "tips",
+                content: `Metode hemat air yang terbukti:
+                    - Grey water recycling
+                    - Optimasi penggunaan mesin cuci
+                    - Teknik siram tanaman efisien
+                    - Penampungan air hujan sederhana
+                    
+                    Implementasi dan hasil penghematan...`,
+                likes: 423,
+                comments: 112,
+                verified: false
+            },
+            {
+                title: "Teknologi Desalinasi Portable untuk Daerah Pesisir",
+                author: "Dr. Irfan Prakoso",
+                date: "2024-03-16",
+                category: "teknologi",
+                content: `Inovasi desalinasi skala rumah tangga:
+                    - Kapasitas 20L/hari
+                    - Tenaga solar cell
+                    - Maintenance mudah
+                    - Biaya terjangkau
+                    
+                    Hasil uji lapangan menunjukkan...`,
+                likes: 267,
+                comments: 73,
+                verified: true
+            }
+        ];
+
+        const postList = document.getElementById('postList');
+        postList.innerHTML = '';
+
+        posts
+            .filter(post => category === 'all' || post.category === category)
+            .forEach(post => {
+                postList.innerHTML += `
+                    <div class="post">
+                        <div class="post-header">
+                            <h3 class="post-title">
+                                ${post.title}
+                                ${post.verified ? '<span class="verified-badge">✓</span>' : ''}
+                            </h3>
+                            <div class="post-meta">
+                                oleh ${post.author} | ${post.date}
+                            </div>
+                        </div>
+                        <div class="post-content">
+                            <p>${post.content}</p>
+                        </div>
+                        <div class="interactions">
+                            <button class="interaction-button like-button">
+                                👍 ${post.likes} Suka
+                            </button>
+                            <button class="interaction-button comment-button">
+                                💬 ${post.comments} Komentar
+                            </button>
+                            <button class="interaction-button share-button">
+                                ↗️ Bagikan
+                            </button>
+                            <button class="interaction-button save-button">
+                                🔖 Simpan
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+    }
+
+    function handleInteraction(type, postId) {
+        switch(type) {
+            case 'like':
+                break;
+            case 'comment':
+                break;
+            case 'share':
+                break;
+            case 'save':
+                break;
+        }
+    }
+
+    const style = document.createElement('style');
+    style.textContent = `
+        .verified-badge {
+            background: #008CBA;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            margin-left: 8px;
+        }
+
+        .post-content {
+            white-space: pre-line;
+            margin: 1rem 0;
+        }
+
+        .like-button:hover { color: #e41e3f; }
+        .comment-button:hover { color: #008CBA; }
+        .share-button:hover { color: #4CAF50; }
+        .save-button:hover { color: #ff9800; }
+    `;
+    document.head.appendChild(style);
+
+    loadPosts();
+</script>
+</body>
+</html>

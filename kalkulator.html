@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Penggunaan Air - Air Bersih Untuk Semua</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .header {
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100%" height="100%" fill="%231ca3ec"/></svg>');
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .nav {
+            background: #008CBA;
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            margin: 0 0.5rem;
+            border-radius: 4px;
+            transition: background 0.3s;
+        }
+
+        .nav a:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .calculator {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 4px;
+        }
+
+        .low { background-color: #90EE90; }
+        .medium { background-color: #FFD700; }
+        .high { background-color: #FFA07A; }
+        .very-high { background-color: #FF6B6B; }
+
+        .tips {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #fff;
+            border-radius: 4px;
+        }
+
+        footer {
+            background: #333;
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>Air Bersih Untuk Semua</h1>
+        <p>Mari bersama mewujudkan akses air bersih yang berkelanjutan</p>
+    </header>
+
+    <nav class="nav">
+        <a href="index.html">Beranda</a>
+        <a href="kalkulator.html">Kalkulator Air</a>
+        <a href="peta.html">Peta Akses</a>
+        <a href="tips.html">Tips Hemat Air</a>
+        <a href="forum.html">Forum</a>
+        <a href="lapor.html">Lapor Krisis</a>
+    </nav>
+    
+    <div class="calculator">
+        <h2>Kalkulator Penggunaan Air Harian</h2>
+        <br></br>
+        
+        <div class="input-group">
+            <label for="shower">Durasi mandi (menit/hari):</label>
+            <input type="number" id="shower" min="0" value="0">
+        </div>
+
+        <div class="input-group">
+            <label for="toilet">Jumlah penggunaan toilet (kali/hari):</label>
+            <input type="number" id="toilet" min="0" value="0">
+        </div>
+
+        <div class="input-group">
+            <label for="laundry">Jumlah cucian (kali/minggu):</label>
+            <input type="number" id="laundry" min="0" value="0">
+        </div>
+
+        <div class="input-group">
+            <label for="dishes">Durasi mencuci piring (menit/hari):</label>
+            <input type="number" id="dishes" min="0" value="0">
+        </div>
+
+        <div class="input-group">
+            <label for="cooking">Air untuk memasak (liter/hari):</label>
+            <input type="number" id="cooking" min="0" value="0">
+        </div>
+
+        <div class="input-group">
+            <label for="plants">Jumlah tanaman yang disiram:</label>
+            <input type="number" id="plants" min="0" value="0">
+        </div>
+
+        <div class="input-group">
+            <label for="other">Penggunaan air lainnya (liter/hari):</label>
+            <input type="number" id="other" min="0" value="0">
+        </div>
+
+        <button onclick="calculateWaterUsage()">Hitung Penggunaan Air</button>
+
+        <div id="result" class="result" style="display:none;"></div>
+        <div id="tips" class="tips" style="display:none;"></div>
+    </div>
+    
+    <footer>
+        <p>© 2024 Air Bersih Untuk Semua. Semua hak dilindungi.</p>
+        <p>Kontak Darurat: 112</p>
+    </footer>
+
+    <script>
+        function calculateWaterUsage() {
+            // Mengambil nilai input
+            const shower = document.getElementById('shower').value * 9; // 9L per menit
+            const toilet = document.getElementById('toilet').value * 9; // 9L per flush
+            const laundry = (document.getElementById('laundry').value * 75) / 7; // 75L per cuci, dibagi 7 untuk per hari
+            const dishes = document.getElementById('dishes').value * 12; // 12L per menit
+            const cooking = Number(document.getElementById('cooking').value);
+            const plants = document.getElementById('plants').value * 2; // 2L per tanaman
+            const other = Number(document.getElementById('other').value);
+
+            // Menghitung total
+            const total = shower + toilet + laundry + dishes + cooking + plants + other;
+
+            // Menentukan kategori
+            let category, color, tips;
+            if (total <= 100) {
+                category = "Rendah";
+                color = "low";
+                tips = [
+                    "Pertahankan kebiasaan hemat air yang sudah baik!",
+                    "Pertimbangkan untuk memasang penampung air hujan",
+                    "Bagikan tips penghematan air kepada orang lain",
+                    "Cek secara rutin kebocoran pipa untuk memastikan efisiensi tetap terjaga",
+                    "Pertimbangkan untuk menggunakan teknologi smart water meter"
+                ];
+            } else if (total <= 150) {
+                category = "Sedang";
+                color = "medium";
+                tips = [
+                    "Kurangi durasi mandi 1-2 menit",
+                    "Gunakan ember untuk mencuci kendaraan alih-alih selang air",
+                    "Tampung air bekas cucian sayur untuk menyiram tanaman",
+                    "Pastikan mesin cuci terisi penuh sebelum digunakan",
+                    "Gunakan air bekas wudhu untuk menyiram tanaman"
+                ];
+            } else if (total <= 200) {
+                category = "Tinggi";
+                color = "high";
+                tips = [
+                    "Pasang alat penghemat air pada keran dan shower",
+                    "Ganti toilet dengan model dual flush yang lebih hemat",
+                    "Perbaiki segera kebocoran sekecil apapun",
+                    "Gunakan timba untuk mandi alih-alih shower",
+                    "Cuci mobil di tempat cucian mobil yang mendaur ulang air"
+                ];
+            } else {
+                category = "Sangat Tinggi";
+                color = "very-high";
+                tips = [
+                    "Lakukan audit penggunaan air secara menyeluruh",
+                    "Ganti semua peralatan air dengan model hemat air",
+                    "Terapkan sistem daur ulang air gray water",
+                    "Kurangi frekuensi mencuci kendaraan",
+                    "Pertimbangkan untuk memasang sistem irigasi tetes untuk tanaman"
+                ];
+            }
+
+            // Menampilkan hasil
+            const resultDiv = document.getElementById('result');
+            resultDiv.className = `result ${color}`;
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = `
+                <h3>Hasil Perhitungan:</h3>
+                <p>Total penggunaan air: ${total.toFixed(1)} liter per hari</p>
+                <p>Kategori: ${category}</p>
+            `;
+
+            // Menampilkan tips
+            const tipsDiv = document.getElementById('tips');
+            tipsDiv.style.display = 'block';
+            tipsDiv.innerHTML = `
+                <h3>Tips Penghematan Air:</h3>
+                <ul>
+                    ${tips.map(tip => `<li>${tip}</li>`).join('')}
+                </ul>
+            `;
+        }
+    </script>
+</body>
+</html>
